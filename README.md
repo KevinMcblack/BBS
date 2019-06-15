@@ -1,0 +1,2 @@
+# BBS
+dotnet core2

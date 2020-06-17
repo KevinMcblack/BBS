@@ -1,0 +1,80 @@
+﻿@model BBS.Models.Topic
+
+@{
+    ViewData["Title"] = "删除";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>删除</h2>
+<div>
+    <h4>话题</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ViewCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ViewCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReplyCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReplyCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastReplyTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastReplyTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AddTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastReplyUserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastReplyUser.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Node)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Node.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.UserName)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="TopicId" />
+        <input type="submit" value="确认删除" class="btn btn-default" /> |
+        <a asp-action="Index">返回首页</a>
+    </form>
+</div>

@@ -1,0 +1,48 @@
+﻿@model BBS.Models.FollowRecord
+
+@{
+    ViewData["Title"] = "详情";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>详情</h2>
+
+<div>
+    <h4>关注用户</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AddTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddTime)
+        </dd>
+        <dt>
+           关注人
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FollowUser.UserName)
+        </dd>
+        <dt>
+            被关注人
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FollowUser.UserName)
+        </dd>
+        <dt>
+           关注人ID
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FollowUser.Id)
+        </dd>
+        <dt>
+            被关注人ID
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">返回首页</a>
+</div>

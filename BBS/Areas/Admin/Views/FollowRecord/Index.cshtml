@@ -1,0 +1,44 @@
+﻿@model IEnumerable<BBS.Models.FollowRecord>
+
+@{
+    ViewData["Title"] = "关注用户管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>关注用户管理</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                关注人
+            </th>
+            <th>
+                被关注人
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddTime)
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a href="~/Account/UserInfo/@item.UserId">@Html.DisplayFor(modelItem => item.User.UserName)</a>
+            </td>
+            <td>
+                <a href="~/Account/UserInfo/@item.FollowUserId">@Html.DisplayFor(modelItem => item.FollowUser.UserName)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddTime)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.FollowRecordId">详情</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

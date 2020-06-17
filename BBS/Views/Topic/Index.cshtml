@@ -1,0 +1,168 @@
+﻿@inject UserServices services
+@model Topic
+@{
+    ViewData["Title"] = Model.Title;
+    var replyList = ViewBag.Replys as List<Reply>;
+    var user = await services.User;
+    var IsTopicRecord = ViewBag.IsTopicRecord;
+    var IsFollowRecord = ViewBag.IsFollowRecord;
+}
+<div class="row">
+    <div class="col-md-9" style="margin-top:20px;">
+        <div class="topic-detail panel panel-default">
+            <div class="panel-heading media clearfix">
+                <div class="media-body">
+                    <h1 class="media-heading">@Model.Title</h1>
+                    <div class="info">
+                        <a class="node" href="/topic/node/@Model.Node.NodeId">@Model.Node.Name</a>
+                        ·
+                        <a href="/Account/UserInfo/@Model.User.Id">@Model.User.UserName</a>
+                        ·
+                        于 <abbr class="timeago">@Model.AddTime.ToString("yyyy-MM-dd HH:mm")</abbr>发布
+                        ·
+                        @Model.ViewCount 次阅读
+                    </div>
+                </div>
+                <div class="media-right">
+                    <a href="#"><img class="media-object img-thumbnail" width="70" height="70" src="@(string.IsNullOrEmpty(Model.User.Image)? "/UploadImages/default.png": "/UploadImages/"+Model.User.Image)"></a>
+                </div>
+            </div>
+            <div class="panel-body markdown">
+                <p id="content">@Model.Content</p>
+            </div>
+            <div class="panel-footer">
+                <div style="float:left">
+                    <form class="form-inline" method="post" asp-controller="Topic" asp-action="AddTopicRecord">
+                        @if (user != null)
+                        {
+                            <input type="hidden" name="TopicId" value="@Model.TopicId" />
+                            <input type="hidden" name="UserId" value="@(user.Id)" />
+                            if (IsTopicRecord == 0)
+                            {
+                                <button type="submit" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    收藏此帖
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-default btn-sm" disabled="disabled">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    已收藏
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-default btn-sm" disabled="disabled">
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                收藏此帖
+                            </button>
+                        }
+                    </form>
+                </div>
+                <div>
+                    <form class="form-inline" method="post" asp-controller="Topic" asp-action="AddFollowRecord">
+                        @if (user != null)
+                        {
+                            <input type="hidden" name="FollowRecordId" value="@Model.TopicId" />
+                            <input type="hidden" name="FollowUserId" value="@Model.User.Id" />
+                            <input type="hidden" name="UserId" value="@(user.Id)" />
+                            if (IsFollowRecord == 0)
+                            {
+                                <button type="submit" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    关注此楼主
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-default btn-sm" disabled="disabled">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    已关注楼主
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-default btn-sm" disabled="disabled">
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                关注作者
+                            </button>
+                        }
+                    </form>
+                </div>  
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <p class="panel-info">共收到 @replyList.Count 条回复：</p>
+            </div>
+            <div class="items panel-body">
+                @for (int i = 0; i < replyList.Count; i++)
+                {
+                    var item = replyList[i];
+                    <div class="reply" data-id="@item.ReplyId" id="reply@(i+1)">
+                        <div class="avatar media-left">
+                            <a href="#">
+                                <img class="media-object avatar" width="70" height="70" src="@(string.IsNullOrEmpty(item.User.Image)?"/UploadImages/default.png": "/UploadImages/"+item.User.Image)">
+                            </a>
+                        </div>
+                        <div class="infos media-right">
+                            <div class="info">
+                                <span class="name">
+                                    <a href="/Account/UserInfo/@Model.User.Id">@item.User.UserName</a>
+                                </span> ·
+                                <span class="time">
+                                    <a class="reply-floor" href="#reply@(i+1)">#@(i + 1)</a> · <abbr class="timeago">@item.AddTime.ToString("yyyy-MM-dd HH:mm")</abbr>
+                                </span>
+                            </div>
+                            <div class="markdown">
+                                <p>@item.Content</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                }
+            </div>
+        </div>
+        <div class="panel panel-default" style="padding:20px;">
+            @if (user != null)
+            {
+                <form class="form-horizontal" method="post" asp-controller="Topic" asp-action="Index">
+                    <input type="hidden" name="TopicId" value="@Model.TopicId" />
+                    <input type="hidden" name="UserId" value="@(user.Id)" />
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="Content">内容</label>
+                        <div class="col-sm-10" id="Content">
+                            <textarea required class="form-control" rows="10" placeholder="填写内容" name="Content" data-provide="markdown"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default">回复</button>
+                        </div>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <p>
+                    需要<a asp-controller="Account" asp-action="Login" class="btn btn-primary">登录</a>发表回复,
+                    如果你还没有账号请点击这里 <a asp-controller="Account" asp-action="Register" class="btn btn-danger">注册</a>。
+                </p>
+            }
+        </div>
+    </div>
+    <div class="col-md-3" style="margin-top:20px;">
+        @Html.Partial("_TopicSidePartial")
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(".markdown p").each(function () {
+            var c = $(this).text();
+            $(this).html(markdown.toHTML(c));
+        })
+    </script>
+}

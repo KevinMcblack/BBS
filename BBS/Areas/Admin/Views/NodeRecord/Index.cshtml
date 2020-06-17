@@ -1,0 +1,48 @@
+﻿@model IEnumerable<BBS.Models.NodeRecord>
+
+@{
+    ViewData["Title"] = "版块收藏管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>版块收藏管理</h2>
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NodeId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddTime)
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a href="~/Account/UserInfo/@item.User.Id">@Html.DisplayFor(modelItem => item.User.UserName)</a>
+            </td>
+            <td>
+                <a href="~/Home/Node/@item.NodeId">@Html.DisplayFor(modelItem => item.Node.Name)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddTime)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.NodeRecordId">详情</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

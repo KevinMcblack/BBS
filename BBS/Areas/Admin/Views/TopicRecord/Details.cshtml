@@ -1,0 +1,48 @@
+﻿@model BBS.Models.TopicRecord
+
+@{
+    ViewData["Title"] = "详情";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>详情</h2>
+
+<div>
+    <h4>话题收藏</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AddTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TopicId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Topic.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.UserName)
+        </dd>
+        <dt>
+            话题ID
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Topic.TopicId)
+        </dd>
+        <dt>
+            收藏者ID
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">返回首页</a>
+</div>

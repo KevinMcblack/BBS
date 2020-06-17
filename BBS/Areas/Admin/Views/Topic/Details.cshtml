@@ -1,0 +1,98 @@
+﻿@model BBS.Models.Topic
+
+@{
+    ViewData["Title"] = "详情";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>详情</h2>
+ <hr />
+    
+<div>
+    <h4>内容</h4>
+    <br/>
+    <p id="content">@Html.DisplayFor(model => model.Content)</p>
+    <br/>
+    <h4>其他信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ViewCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ViewCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReplyCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReplyCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastReplyTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastReplyTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AddTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastReplyUserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastReplyUser.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NodeId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Node.NodeId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.Id)
+        </dd>
+
+        <dt>
+            最后回复用户
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastReplyUser.UserName)
+        </dd>
+        <dt>
+           版块
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Node.Name)
+        </dd>
+        <dt>
+            创建人
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.UserName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">返回首页</a>
+</div>
+@section scripts{
+    <script>
+        $("#content").each(function () {
+            var c = $(this).text();
+            $(this).html(markdown.toHTML(c));
+        })
+    </script>
+}

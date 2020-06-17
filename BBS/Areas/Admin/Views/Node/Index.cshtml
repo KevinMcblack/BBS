@@ -1,0 +1,54 @@
+﻿@model IEnumerable<BBS.Models.Node>
+
+@{
+    ViewData["Title"] = "版块管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>版块管理</h2>
+
+<p>
+    <a asp-action="Create">创建新版块</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                   版块名
+                </th>
+                <th>
+                   是否父版块
+                </th>
+                <th>
+                    父版块id
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AddTime)
+                </th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a href="~/Home/Node/@item.NodeId"> @Html.DisplayFor(modelItem => item.Name)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsParent)
+            </td>
+            <td>
+                <a href="~/Home/Node/@item.ParentId"> @Html.DisplayFor(modelItem => item.ParentId)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddTime)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.NodeId">修改</a> |
+                <a asp-action="Details" asp-route-id="@item.NodeId">详情</a> |
+                <a asp-action="Delete" asp-route-id="@item.NodeId">删除</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

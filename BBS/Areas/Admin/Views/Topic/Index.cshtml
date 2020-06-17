@@ -1,0 +1,52 @@
+﻿@model IEnumerable<BBS.Models.Topic>
+
+@{
+    ViewData["Title"] = "话题管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>话题管理</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReplyCount)
+            </th>
+            <th>
+                创建人
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
+                    <a href="~/Topic/@item.TopicId">@Html.DisplayFor(modelItem => item.Title)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ViewCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReplyCount)
+                </td>
+                <td>
+                    <a href="~/Account/UserInfo/@item.User.Id">@Html.DisplayFor(modelItem => item.User.UserName)</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.TopicId">详情</a> |
+                    <a asp-action="Delete" asp-route-id="@item.TopicId">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<BBS.Models.User>
+
+@{
+    ViewData["Title"] = "用户管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>用户管理</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Introduce)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.AddTime)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.LastTime)
+            </th>*@
+            @*<th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>*@
+            <th>
+                @*@Html.DisplayNameFor(model => model.UserName)*@
+                用户名
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Email)*@
+                邮箱
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.PhoneNumber)*@
+                手机号码
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Image)*@
+                <img class="media-object img-thumbnail" width="70" height="70" src="/UploadImages/@Html.DisplayFor(modelItem => item.Image)">
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Introduce)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.AddTime)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.LastTime)
+            </td>*@
+            @*<td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>*@
+            <td>
+                <a href="~/Account/UserInfo/@item.Id">@Html.DisplayFor(modelItem => item.UserName)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">用户详情</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">删除</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

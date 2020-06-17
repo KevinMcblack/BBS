@@ -1,0 +1,158 @@
+﻿@{
+    ViewData["Title"] = "基于.Net Core 2.0的在线论坛系统";
+    var topics = ViewBag.Topics as List<TopicViewModel>;
+    var user = ViewBag.User as User;
+    var nodes = ViewBag.Nodes as List<Node>;
+}
+@model Topic
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+
+    <!-- Indicators --> <ul class="carousel-indicators">
+        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+    </ul> <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            <img class="img-responsive" src="https://img.zcool.cn/community/0140ee5c6a3847a801213f26ac9524.jpg@1280w_1l_2o_100sh.jpg" />
+            <div class="carousel-caption">
+                @*<h1>轮播1的标题</h1>
+                <p>这里是轮播图1的说明</p>*@
+            </div>
+        </div>
+        <div class="item">
+            <img class="img-responsive" src="https://img.zcool.cn/community/0124eb5c6a3849a801203d22b1cd08.jpg@1280w_1l_2o_100sh.jpg" />
+            <div class="carousel-caption">
+                @*<h1>轮播2的标题</h1>
+                <p>这里是轮播图2的说明</p>*@
+            </div>
+        </div>
+        <div class="item">
+            <img class="img-responsive" src="https://img.zcool.cn/community/01c9445c6a384aa801213f26c3ae3e.jpg@1280w_1l_2o_100sh.jpg" />
+            <div class="carousel-caption">
+                @*<h1>轮播3的标题</h1>
+                <p>这里是轮播图3的说明</p>*@
+            </div>
+        </div>
+    </div> <!-- Controls -->
+    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<div class="row" style="margin-top:20px">
+    <div class="col-md-9 topics">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <div class="pull-right">
+                    <span class="l">推荐版块:</span>
+                    @foreach (var item in nodes.Where(r => r.IsParent == IsParent.Parent))
+                    {
+                        <a href="/Home/Node/@item.NodeId">@item.Name &nbsp;| &nbsp;</a>
+                    }
+                </div>
+            </div>
+            <div class="panel-body">
+                @foreach (var item in topics)
+                {
+                    <div class="topic">
+                        <div class="avatar media-left">
+                            <a href="/Account/UserInfo/@item.UserId">
+                                <img class="avatar" width="70" height="70" src="@(string.IsNullOrEmpty(item.Image)? "/UploadImages/default.png":"/UploadImages/"+item.Image)">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <div class="title">
+                                <a asp-controller="Topic" asp-action="Index" asp-route-id="@item.TopicId">
+                                    @item.Title
+                                </a>
+                                <div style="float:right;">
+                                    @if (item.ReplyCount > 0)
+                                    {
+                                        <a class="navbar-static-top" href="/Topic/@item.TopicId#reply@(item.ReplyCount)">回复数量 : @item.ReplyCount</a>
+                                    }
+                                </div>
+                            </div>
+                            <br />
+                            <div class="info" style="padding-top:10px">
+                                <a href="/Home/Node/@item.NodeId">@item.NodeName</a> &nbsp;|&nbsp; <a href="/Account/UserInfo/@item.UserId"><label>@item.UserName</label></a>
+                                &nbsp;|&nbsp;@item.AddTime.ToString("yyyy-MM-dd HH:mm")发布
+                                @if (item.LastReplyTime != DateTime.MinValue)
+                                {
+                                    <label style="float:right;">最后回复 @item.LastReplyTime.ToString("yyyy-MM-dd HH:mm")</label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                }
+            </div>
+            <div class="panel-footer clearfix">
+                @Html.Partial("_PagePartial", ViewData)
+            </div>
+        </div>
+        <div class="panel panel-default" style="padding:15px" id="NewTopic">
+            @if (user != null)
+            {
+                <form class="form-horizontal" method="post" asp-controller="Home" asp-action="Index">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="NodeId" class="col-sm-2 control-label">版块</label>
+                        <div class="col-sm-10">
+                            <select asp-for="NodeId" id="NodeId" class="form-control" required asp-items="ViewBag.NodeListItem" title="请选择一个版块"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Title" class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-10">
+                            <input asp-for="Title" class="form-control" required placeholder="填写标题" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Content" class="col-sm-2 control-label">内容</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" rows="10" asp-for="Content" required placeholder="填写内容" id="editor" data-provide="markdown"></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" asp-for="UserId" value="@(user.Id)" />
+                        <div class="col-sm-offset-2 col-sm-10" id="btn_TopicSave">
+                            <button type="submit" class="btn btn-default">发布</button>
+                        </div>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <a class="btn btn-primary btn-block" asp-controller="Account" asp-action="Login">发布新话题</a>
+            }
+        </div>
+    </div>
+    <div class="col-md-3">
+        @Html.Partial("_RightSidePartial")
+        <div id="sections" class="panel panel-default">
+            <div class="panel-heading">所有版块</div>
+            <div class="panel-body">
+                @foreach (var item in nodes.Where(r => r.IsParent == IsParent.Parent))
+                {
+                    <div class="widget">
+                        <h4 class="title"><a href="/Home/Node/@item.NodeId">@item.Name</a></h4>
+                        <div class="content">
+                            @foreach (var n in nodes.Where(r => r.ParentId == item.NodeId))
+                            {
+                                <a href="/Home/Node/@n.NodeId">@n.Name</a>
+                            }
+                        </div>
+                    </div>
+                    <hr />
+                }
+            </div>
+        </div>
+    </div>
+</div>

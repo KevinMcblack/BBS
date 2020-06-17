@@ -1,0 +1,76 @@
+﻿@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+<div class="panel panel-default">
+    <div class="panel-heading">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div class="avatar media-left">
+                <a href="#"><img class="avatar" width="70" height="70" src="@(string.IsNullOrEmpty(UserManager.GetUserAsync(User).Result.Image)? "/UploadImages/default.png":"/UploadImages/"+ UserManager.GetUserAsync(User).Result.Image)"></a>
+            </div>
+            <div class="panel-title media-left">
+                <br />
+                <a href="/Account/UserInfo/@UserManager.GetUserAsync(User).Result.Id">@UserManager.GetUserAsync(User).Result.UserName</a>
+            </div>
+            <div class="panel-body">
+                <a data-toggle="modal" data-target="#addNodeRecordModal">版块收藏：</a><a href="/Account/NodeRecord">@ViewBag.NodeRecordCount</a>
+                <hr />
+                <a>话题收藏：</a><a href="/Account/TopicRecord">@ViewBag.TopicRecordCount</a>
+                <hr />
+                <a>特别关注：</a><a href="/Account/FollowRecord">@ViewBag.FollowRecordCount</a>
+                <hr />
+                <a href="#NewTopic">发布新话题</a>
+                <hr />
+                服务器时间：
+                <br/>
+                @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            </div>
+            <!-- 模态框（Modal） -->
+            <div class="modal fade" id="addNodeRecordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form class="form-horizontal" method="post" asp-controller="Home" asp-action="AddNodeRecord">
+                            <input type="hidden" name="UserId" value="@UserManager.GetUserId(User)" />
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">
+                                    ×
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    请选择自己感兴趣的版块
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">版块</label>
+                                    <div class="col-sm-10">
+                                        <select name="NodeIdList" asp-items="ViewBag.NodeListItem" required class="form-control selectpicker" multiple data-live-search="true" data-actions-box="true"></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                        data-dismiss="modal">
+                                    关闭
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    保存
+                                </button>
+                            </div>
+                        </form>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        }
+        else
+        {
+            <h3 class="panel-title">BBS在线论坛</h3>
+            <div class="panel-body">
+                游客您好！
+                <br />
+                服务器时间：
+                <br />
+                @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            </div>
+        }
+    </div>
+</div>
